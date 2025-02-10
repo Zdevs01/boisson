@@ -46,6 +46,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="<?php echo base_url ?>admin/?page=creancier" class="nav-link nav-creancier">
+            <i class="nav-icon fas fa-Creancier"></i>
+            <p>Creancier</p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="<?php echo base_url ?>admin/?page=fournisseur" class="nav-link nav-fournisseur">
             <i class="nav-icon fas fa-handshake"></i>
             <p>Versement fournisseurs</p>
@@ -76,14 +82,34 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="<?php echo base_url ?>admin/?page=maintenance/supplier" class="nav-link nav-maintenance_supplier">
+            <i class="nav-icon fas fa-truck-loading"></i>
+            <p>Fournisseur</p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="<?php echo base_url ?>admin/?page=sales" class="nav-link nav-sales">
             <i class="nav-icon fas fa-receipt"></i>
             <p>Ventes</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="<?php echo base_url ?>admin/?page=clients" class="nav-link nav-clients">
+            <i class="nav-icon fas fa-user"></i>
+            <p>Clients</p>
+          </a>
+        </li>
 
         <?php if($_settings->userdata('type') == 1): ?>
         <li class="nav-header">Administration</li>
+
+        <li class="nav-item">
+          <a href="<?php echo base_url ?>admin/?page=maintenance/item" class="nav-link nav-maintenance_item">
+            <i class="nav-icon fas fa-boxes"></i>
+            <p>Liste des Articles</p>
+          </a>
+        </li>
+
         <li class="nav-item">
           <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user_list">
             <i class="nav-icon fas fa-users"></i>
@@ -103,30 +129,42 @@
 </aside>
 
 <style>
+  /* Appliquer un scroll si trop long */
+  .sidebar {
+    max-height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #f39c12 #343a40;
+  }
+
+  /* Personnalisation de la barre de défilement */
+  .sidebar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .sidebar::-webkit-scrollbar-track {
+    background: #343a40;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: #f39c12;
+    border-radius: 4px;
+  }
+
+  /* Effets visuels sur les liens */
   .nav-sidebar .nav-item a {
     transition: all 0.3s ease-in-out;
     position: relative;
   }
+
   .nav-sidebar .nav-item a:hover {
     background: rgba(255, 255, 255, 0.1);
     transform: scale(1.05);
   }
+
   .nav-sidebar .nav-item a.active {
     background: #f39c12 !important;
     color: #fff !important;
-  }
-  .nav-sidebar .nav-item a::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: 0;
-    left: -100%;
-    background: #f39c12;
-    transition: all 0.3s ease-in-out;
-  }
-  .nav-sidebar .nav-item a:hover::after {
-    left: 0;
   }
 </style>
 

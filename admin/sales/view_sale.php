@@ -110,7 +110,7 @@ if($qry->num_rows > 0){
             <tfoot>
                 <tr>
                     <th class="text-right py-1 px-2"  colspan="5">Total</th>
-                    <th class="text-right py-1 px-2  grand-total"><?php echo number_format($total, 2) ?> XFA</th>
+                    <th class="text-right py-1 px-2  grand-total"><?php echo number_format($total, 2) ?> €</th>
                 </tr>
                 <tr>
                     <th class="text-right py-1 px-2"  colspan="5">Montant en lettres</th>
@@ -205,7 +205,7 @@ if($qry->num_rows > 0){
             <tfoot>
                 <tr>
                     <th class="text-right py-1 px-2"  colspan="5">Total</th>
-                    <th class="text-right py-1 px-2  grand-total"><?php echo number_format($total, 2) ?> XFA</th>
+                    <th class="text-right py-1 px-2  grand-total"><?php echo number_format($total, 2) ?> €</th>
                 </tr>
                 <tr>
                     <th class="text-right py-1 px-2"  colspan="5">Montant en lettres</th>

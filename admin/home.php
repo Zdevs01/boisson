@@ -49,7 +49,63 @@
         </div>
         <?php } ?>
     </div>
-    
+    <?php
+include 'db_connect.php'; // Connexion à la base de données
+
+// Vérification de la connexion
+if (!$conn) {
+    die("Erreur de connexion à la base de données.");
+}
+
+// Récupérer les ventes par mois
+$salesQuery = "SELECT DATE_FORMAT(sale_date, '%b') as month, SUM(total_price) as total 
+               FROM sales GROUP BY month ORDER BY MIN(sale_date)";
+$salesStmt = $conn->prepare($salesQuery);
+$salesStmt->execute();
+$salesResults = $salesStmt->fetchAll(PDO::FETCH_ASSOC);
+
+$salesMonths = [];
+$salesData = [];
+foreach ($salesResults as $row) {
+    $salesMonths[] = $row['month'];
+    $salesData[] = $row['total'];
+}
+
+// Récupérer le stock disponible par produit
+$stockQuery = "SELECT item_id, SUM(quantity) as total_stock FROM stock_list GROUP BY item_id";
+$stockStmt = $conn->prepare($stockQuery);
+$stockStmt->execute();
+$stockResults = $stockStmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stockLabels = [];
+$stockData = [];
+foreach ($stockResults as $row) {
+    $stockLabels[] = "Produit " . $row['item_id']; 
+    $stockData[] = $row['total_stock'];
+}
+?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-shadow"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #1e1e2f;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        canvas {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+ <div class="container">
+    <h2 class="mt-4 text-center" style="color: #1e1e2f; " >📊 Tableau de Bord DrinkFlow</h2>
+
     <div class="row mt-4">
         <div class="col-md-6">
             <canvas id="salesChart"></canvas>
@@ -58,36 +114,85 @@
             <canvas id="stockChart"></canvas>
         </div>
     </div>
-    
-    <script>
-        var ctx1 = document.getElementById('salesChart').getContext('2d');
-        var salesChart = new Chart(ctx1, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Juin', 'Juil'],
-                datasets: [{
-                    label: 'Ventes',
-                    data: [120, 190, 300, 500, 200, 300, 400],
-                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
-                    borderColor: 'rgba(0, 123, 255, 1)',
-                    borderWidth: 2
-                }]
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var ctx1 = document.getElementById('salesChart').getContext('2d');
+    var gradient1 = ctx1.createLinearGradient(0, 0, 0, 400);
+    gradient1.addColorStop(0, 'rgba(0, 123, 255, 0.5)');
+    gradient1.addColorStop(1, 'rgba(0, 123, 255, 0.1)');
+
+    var salesChart = new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: <?php echo json_encode($salesMonths); ?>,
+            datasets: [{
+                label: 'Ventes mensuelles 💰',
+                data: <?php echo json_encode($salesData); ?>,
+                backgroundColor: gradient1,
+                borderColor: '#007bff',
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#007bff',
+                pointHoverRadius: 7,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#fff' } }
+            },
+            scales: {
+                x: { ticks: { color: '#fff' } },
+                y: { ticks: { color: '#fff' } }
+            },
+            animation: {
+                duration: 2000,
+                easing: 'easeInOutQuart'
             }
-        });
-        
-        var ctx2 = document.getElementById('stockChart').getContext('2d');
-        var stockChart = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: ['Produit A', 'Produit B', 'Produit C', 'Produit D'],
-                datasets: [{
-                    label: 'Stock Disponible',
-                    data: [500, 700, 400, 600],
-                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
-                    borderWidth: 2
-                }]
+        }
+    });
+
+    var ctx2 = document.getElementById('stockChart').getContext('2d');
+    var gradient2 = ctx2.createLinearGradient(0, 0, 0, 400);
+    gradient2.addColorStop(0, 'rgba(40, 167, 69, 0.5)');
+    gradient2.addColorStop(1, 'rgba(40, 167, 69, 0.1)');
+
+    var stockChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode($stockLabels); ?>,
+            datasets: [{
+                label: 'Stock Disponible 📦',
+                data: <?php echo json_encode($stockData); ?>,
+                backgroundColor: gradient2,
+                borderColor: '#28a745',
+                borderWidth: 2,
+                hoverBackgroundColor: '#45d86c'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#fff' } }
+            },
+            scales: {
+                x: { ticks: { color: '#fff' } },
+                y: { ticks: { color: '#fff' } }
+            },
+            animation: {
+                duration: 2500,
+                easing: 'easeInOutQuart'
             }
-        });
-    </script>
+        }
+    });
+});
+</script>
+
+
 </body>

@@ -48,12 +48,25 @@ if(isset($_GET['id'])){
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="num" class="control-label text-info">Numéro de téléphone</label>
-                                <input type="text" id="num" name="num" class="form-control form-control-sm rounded-0" placeholder="693481655" value="<?php echo isset($num) ? $num : '693481655'; ?>" maxlength="9" pattern="\d{9}" title="Le numéro de téléphone doit contenir exactement 9 chiffres">
-                                <small class="form-text text-muted">Le numéro de téléphone doit contenir exactement 9 chiffres.</small>
-                            </div>
-                        </div>
+    <div class="form-group">
+        <label for="num" class="control-label text-info">
+            <i class="fas fa-phone"></i> Numéro de téléphone
+        </label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+            </div>
+            <input type="tel" id="num" name="num" class="form-control form-control-sm rounded-0" 
+                   placeholder="06 12 34 56 78" 
+                   value="<?php echo isset($num) ? $num : ''; ?>" 
+                   maxlength="10" 
+                   pattern="0\d{9}" 
+                   title="Le numéro de téléphone doit contenir exactement 10 chiffres et commencer par 0">
+        </div>
+        <small class="form-text text-muted">Le numéro de téléphone doit contenir exactement 10 chiffres et commencer par 0.</small>
+    </div>
+</div>
+
 
 
                         
@@ -107,7 +120,8 @@ if(isset($_GET['id'])){
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="price" class="control-label">Prix Unitaire</label>
-                                    <input type="number" class="form-control rounded-0" id="price" placeholder="prix">
+                                    <input type="number" class="form-control rounded-0" id="price" placeholder="prix" readonly>
+
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">
@@ -179,7 +193,7 @@ if(isset($_GET['id'])){
                         <tfoot>
                             <tr>
                                 <th class="text-right py-1 px-2" colspan="5">Total</th>
-                                <th class="text-right py-1 px-2 grand-total">0</th>
+                                <input type="hidden" name="amount" value="<?php echo isset($discount) ? $discount : 0 ?>">
                             </tr>
                         </tfoot>
                     </table>
@@ -220,6 +234,20 @@ if(isset($_GET['id'])){
         </tr>
     </table>
     <script>
+        $(document).ready(function() {
+    var item_prices = <?php echo json_encode($cost_arr); ?>; // Récupérer les prix depuis PHP
+
+    $('#item_id').change(function() {
+        var item_id = $(this).val();
+        if (item_id && item_prices[item_id]) {
+            $('#price').val(item_prices[item_id]); // Remplit le prix avec la valeur correspondante
+        } else {
+            $('#price').val('');
+        }
+    });
+});
+
+
 $(document).ready(function() {
     // Affiche le champ de quantité approprié selon le type d'unité sélectionné
     $('#unit').change(function() {

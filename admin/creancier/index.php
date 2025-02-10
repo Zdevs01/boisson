@@ -36,53 +36,50 @@ if (isset($_POST['action']) && isset($_POST['id'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Créanciers</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Gestion des Créanciers - Entrepôt de Boissons</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f5f5f5;
             margin: 0;
             padding: 0;
         }
         .container {
-            width: 80%;
+            width: 90%;
+            max-width: 1000px;
             margin: auto;
-            overflow: hidden;
             background-color: #fff;
             padding: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            margin-top: 30px;
         }
         h1 {
             text-align: center;
-            color: #4CAF50;
-            margin-top: 0;
-            font-weight: 500;
+            color: #2C3E50;
+            margin-bottom: 20px;
         }
         form {
-            background-color: #ffffff;
-            padding: 30px;
+            background-color: #ECF0F1;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         input, textarea {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             margin: 10px 0;
-            border: 1px solid #ddd;
+            border: 1px solid #BDC3C7;
             border-radius: 6px;
-            font-size: 16px;
         }
         button {
-            background-color: #4CAF50;
+            background-color: #2980B9;
             color: white;
             padding: 12px 20px;
             border: none;
@@ -92,11 +89,11 @@ if (isset($_POST['action']) && isset($_POST['id'])) {
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #1F618D;
         }
         .table-container {
             overflow-x: auto;
-            margin-top: 30px;
+            margin-top: 20px;
         }
         table {
             width: 100%;
@@ -111,65 +108,60 @@ if (isset($_POST['action']) && isset($_POST['id'])) {
             text-align: center;
             border: 1px solid #ddd;
         }
+        th {
+            background-color: #3498DB;
+            color: white;
+        }
         .action-buttons button {
             margin: 5px;
-            background-color: #008CBA;
+            background-color: #2ECC71;
             border-radius: 6px;
         }
         .action-buttons button:hover {
-            background-color: #006f8e;
+            background-color: #27AE60;
         }
-
-        /* Ajout de la couleur pour les créances finalisées */
         .soldee {
-            background-color: #4CAF50;
+            background-color: #2ECC71;
             color: white;
             font-weight: bold;
         }
-
         .en_attente {
-            background-color: #ffcc00;
+            background-color: #E74C3C;
             color: white;
             font-weight: bold;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Ajouter un Créancier</h1>
-
-    <!-- Formulaire d'ajout de créancier -->
+    <h1><i class="fas fa-warehouse"></i> Gestion des Créanciers</h1>
     <form method="POST">
         <input type="text" name="nom" placeholder="Nom" required>
         <input type="text" name="numero_telephone" placeholder="Numéro de téléphone" required>
-        <input type="number" name="montant" placeholder="Montant total" required>
+        <input type="number" name="montant" placeholder="Montant total (€)" required>
         <input type="text" name="motif" placeholder="Motif" required>
         <textarea name="notes" placeholder="Notes (facultatif)"></textarea>
-        <button type="submit" name="add_creancier">Ajouter Créancier</button>
+        <button type="submit" name="add_creancier"><i class="fas fa-plus"></i> Ajouter Créancier</button>
     </form>
 
-    <!-- Tableau des créanciers -->
     <div class="table-container">
         <table>
             <thead>
                 <tr>
                     <th>Nom</th>
                     <th>Téléphone</th>
-                    <th>Montant Total</th>
-                    <th>Avance</th>
-                    <th>Reste</th>
+                    <th>Montant (€)</th>
+                    <th>Avance (€)</th>
+                    <th>Reste (€)</th>
                     <th>Motif</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Dynamique PHP pour afficher les créanciers -->
+          
+
             <?php foreach ($creanciers as $creancier): ?>
                 <tr class="<?= ($creancier['montant'] - $creancier['avance'] == 0) ? 'soldee' : 'en_attente'; ?>">
                     <td><?= htmlspecialchars($creancier['nom']); ?></td>

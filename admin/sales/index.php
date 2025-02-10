@@ -26,7 +26,7 @@
                         <th>Code Vente</th>
                         <th>Client</th>
                         <th>Articles</th>
-                        <th>Montant (FCFA)</th>
+                        <th>Montant (€)</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -70,13 +70,30 @@
     </div>
 </div>
 
-<!-- Ajout d'un graphique des ventes -->
+
+<?php 
+// Récupération des données pour le graphique
+$sales_data = [];
+$labels = [];
+$amounts = [];
+
+$qry = $conn->query("SELECT DATE_FORMAT(date_created, '%b %Y') as month, SUM(amount) as total FROM sales_list GROUP BY month ORDER BY date_created ASC");
+while ($row = $qry->fetch_assoc()) {
+    $labels[] = $row['month'];
+    $amounts[] = $row['total'];
+}
+
+// Transformation des données en format JSON pour JavaScript
+$labels_json = json_encode($labels);
+$amounts_json = json_encode($amounts);
+?>
+
 <div class="card card-outline card-info mt-4">
     <div class="card-header">
         <h3 class="card-title"><i class="fas fa-chart-bar"></i> Statistiques des Ventes</h3>
     </div>
     <div class="card-body">
-        <canvas id="salesChart"></canvas>
+        <canvas id="salesChart" style="height: 300px;"></canvas>
     </div>
 </div>
 
@@ -85,29 +102,59 @@
         $('.delete_data').click(function(){
             _conf("Êtes-vous sûr de vouloir supprimer cette vente ?", "delete_sale", [$(this).attr('data-id')]);
         });
+
         $('.table').dataTable();
 
-        // Ajout du graphique des ventes
+        // Récupération des données PHP
+        var labels = <?php echo $labels_json; ?>;
+        var amounts = <?php echo $amounts_json; ?>;
+
+        // Création du graphique des ventes
         var ctx = document.getElementById('salesChart').getContext('2d');
         var salesChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+                labels: labels,
                 datasets: [{
-                    label: 'Montant des ventes (FCFA)',
-                    data: [120000, 150000, 80000, 95000, 110000, 130000],
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    label: 'Montant des ventes (€)',
+                    data: amounts,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',   // Rouge (vin)
+                        'rgba(54, 162, 235, 0.6)',  // Bleu (eau)
+                        'rgba(255, 206, 86, 0.6)',  // Jaune (bière)
+                        'rgba(75, 192, 192, 0.6)',  // Vert (jus)
+                        'rgba(153, 102, 255, 0.6)', // Violet (liqueurs)
+                        'rgba(255, 159, 64, 0.6)'   // Orange (sodas)
+                    ],
+                    borderColor: 'rgba(0, 0, 0, 0.3)',
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + "€";
+                            }
+                        }
                     }
+                },
+                animation: {
+                    duration: 1500,
+                    easing: 'easeInOutBounce'
                 }
             }
         });
