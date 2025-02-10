@@ -1,0 +1,31 @@
+$username = $_POST['username'];
+$id = isset($_POST['id']) ? $_POST['id'] : 0;
+
+// Vérifier si l'utilisateur existe déjà
+$check = $conn->query("SELECT id FROM users WHERE username = '$username' AND id != '$id'");
+if ($check->num_rows > 0) {
+    echo json_encode(['status' => 'duplicate']);
+    exit;
+}
+
+// Insérer ou mettre à jour l'utilisateur
+if ($id > 0) {
+    $query = "UPDATE users SET firstname=?, lastname=?, username=?, type=? WHERE id=?";
+} else {
+    $query = "INSERT INTO users (firstname, lastname, username, type, password) VALUES (?, ?, ?, ?, ?)";
+}
+
+$stmt = $conn->prepare($query);
+if ($id > 0) {
+    $stmt->bind_param("sssii", $_POST['firstname'], $_POST['lastname'], $_POST['username'], $_POST['type'], $id);
+} else {
+    $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $stmt->bind_param("sssisi", $_POST['firstname'], $_POST['lastname'], $_POST['username'], $_POST['type'], $hashed_password);
+}
+
+if ($stmt->execute()) {
+    echo json_encode(['status' => 'success']);
+} else {
+    echo json_encode(['status' => 'error', 'msg' => $stmt->error]);
+}
+exit;
