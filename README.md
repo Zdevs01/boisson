@@ -46,7 +46,8 @@ Copier
 Modifier
 http://localhost/DrinkStock/
 📸 Aperçu du projet
-(Ajoute ici des captures d'écran du projet pour une meilleure présentation.)
+
+![Capture](https://github.com/user-attachments/assets/ec940a0a-6811-4232-bec3-a178de258331)
 
 💡 Contribution
 Les contributions sont les bienvenues ! Forke le projet, crée une branche et soumets une pull request.
