@@ -1,6 +1,9 @@
 🍾 DrinkStock – Gestion d'entrepôt de boissons
 DrinkStock est un logiciel de gestion d'entrepôt de boissons développé en PHP 8.1 et MySQL sous XAMPP. Il permet le suivi des stocks, des ventes et des approvisionnements via une interface intuitive et efficace.
 
+username - Tester-beter
+password - Tester-beter
+
 📌 Fonctionnalités principales
 ✅ Gestion des stocks en temps réel
 ✅ Enregistrement des ventes et approvisionnements
