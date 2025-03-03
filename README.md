@@ -52,4 +52,4 @@ http://localhost/DrinkStock/
 Les contributions sont les bienvenues ! Forke le projet, crée une branche et soumets une pull request.
 
 📞 Support
-📧 Contact : etsriky237@gmail.com
+📧 Contact : 693481655
