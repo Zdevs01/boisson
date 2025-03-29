@@ -8,36 +8,66 @@ if($qry->num_rows > 0){
 ?>
 
 
+<style>
+    .card-body {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
 
+.print-info {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+
+.print-info .control-label {
+    font-weight: bold;
+}
+
+.print-info span {
+    font-size: 16px;
+    color: #333;
+}
+
+</style>
 
 
 
 
 <div class="card card-outline card-primary">
-    <div class="card-header">
-        <h4 class="card-title">Détails de la Commande - <?php echo $po_code ?></h4>
+<div class="card-header">
+    <h4 class="card-title">Détails de la Commande - <?php echo $po_code ?></h4>
+</div>
+<div class="card-body" id="print_out">
+    <div class="container-fluid" id="sales-content">
+        <!-- Information Alignée en une ligne -->
+        <div class="row print-info" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="col-md-4" style="flex: 1; text-align: left; padding: 10px;">
+                <label class="control-label text-info" style="font-weight: 600; font-size: 16px; color: #007bff;">Code de Commande :</label>
+                <span style="font-size: 16px; font-weight: 500;"><?php echo isset($po_code) ? $po_code : '' ?></span>
+            </div>
+            <div class="col-md-4" style="flex: 1; text-align: center; padding: 10px;">
+                <label class="control-label text-info" style="font-weight: 600; font-size: 16px; color: #007bff;">Fournisseur :</label>
+                <span style="font-size: 16px; font-weight: 500;"><?php echo isset($supplier) ? $supplier : '' ?></span>
+            </div>
+            <div class="col-md-4" style="flex: 1; text-align: center; padding: 10px;">
+                <label class="control-label text-info" style="font-weight: 600; font-size: 16px; color: #007bff;">Client :</label>
+                <span style="font-size: 16px; font-weight: 500;"><?php echo isset($client) ? $client : '' ?></span>
+            </div>
+            <div class="col-md-4" style="flex: 1; text-align: right; padding: 10px;">
+                <label class="control-label text-info" style="font-weight: 600; font-size: 16px; color: #007bff;">Téléphone :</label>
+                <span style="font-size: 16px; font-weight: 500;"><?php echo isset($num) ? $num : '' ?></span>
+            </div>
+            <div class="col-md-4" style="flex: 1; text-align: right; padding: 10px;">
+                <label class="control-label text-info" style="font-weight: 600; font-size: 16px; color: #007bff;">Date de permemtion :</label>
+                <span style="font-size: 16px; font-weight: 500;"><?php echo isset($date) ? $date : '' ?></span>
+            </div>
+        </div>
     </div>
-    <div class="card-body" id="print_out">
-        <div class="container-fluid" id="sales-content">
-            <!-- Information Alignée en une ligne -->
-            <div class="row print-info" style="display: flex; justify-content: space-between; align-items: center;">
-    <div class="col-md-4" style="flex: 1; text-align: left;">
-        <label class="control-label text-info">Code de Commande :</label>
-        <span><?php echo isset($po_code) ? $po_code : '' ?></span>
-    </div>
-    <div class="col-md-4" style="flex: 1; text-align: center;">
-        <label class="control-label text-info">Fournisseur :</label>
-        <span><?php echo isset($supplier) ? $supplier : '' ?></span>
-    </div>
-    <div class="col-md-4" style="flex: 1; text-align: center;">
-        <label class="control-label text-info">Client :</label>
-        <span><?php echo isset($client) ? $client : '' ?></span>
-    </div>
-    <div class="col-md-4" style="flex: 1; text-align: right;">
-        <label class="control-label text-info">Téléphone :</label>
-        <span><?php echo isset($num) ? $num : '' ?></span>
-    </div>
-  </div>
+</div>
+
 
 
             <h4 class="text-info">Articles Commandés</h4>
@@ -51,9 +81,9 @@ if($qry->num_rows > 0){
                 </colgroup>
                 <thead>
                     <tr class="text-light bg-navy">
-                        <th class="text-center py-1 px-2">TONNE</th>
+                        <th class="text-center py-1 px-2"></th>
                         <th class="text-center py-1 px-2">Quantité</th>
-                        <th class="text-center py-1 px-2">(Unite)</th>
+                        <th class="text-center py-1 px-2">(Type Unite)</th>
                         <th class="text-center py-1 px-2">Désignation</th>
                         <th class="text-center py-1 px-2">Prix Unitaire</th>
                         <th class="text-center py-1 px-2">Total</th>
@@ -115,108 +145,7 @@ if($qry->num_rows > 0){
             </div>
         </div>
 
-        <div class="separator" style="border-top: 2px dashed black; margin: 20px 0;"></div>
-
-        <div class="container-fluid" id="sales-content">
-            <!-- Information Alignée en une ligne -->
-            <div class="row print-info" style="display: flex; justify-content: space-between; align-items: center;">
-    <div class="col-md-4" style="flex: 1; text-align: left;">
-        <label class="control-label text-info">Code de Commande :</label>
-        <span><?php echo isset($po_code) ? $po_code : '' ?></span>
-    </div>
-    <div class="col-md-4" style="flex: 1; text-align: center;">
-        <label class="control-label text-info">Fournisseur :</label>
-        <span><?php echo isset($supplier) ? $supplier : '' ?></span>
-    </div>
-    <div class="col-md-4" style="flex: 1; text-align: center;">
-        <label class="control-label text-info">Client :</label>
-        <span><?php echo isset($client) ? $client : '' ?></span>
-    </div>
-    <div class="col-md-4" style="flex: 1; text-align: right;">
-        <label class="control-label text-info">Téléphone :</label>
-        <span><?php echo isset($num) ? $num : '' ?></span>
-    </div>
-  </div>
-
-
-            <h4 class="text-info">Articles Commandés</h4>
-            <table class="table table-striped table-bordered" id="list">
-                <colgroup>
-                    <col width="10%">
-                    <col width="10%">
-                    <col width="30%">
-                    <col width="25%">
-                    <col width="25%">
-                </colgroup>
-                <thead>
-                    <tr class="text-light bg-navy">
-                        <th class="text-center py-1 px-2">TONNE</th>
-                        <th class="text-center py-1 px-2">Quantité</th>
-                        <th class="text-center py-1 px-2">(Unite)</th>
-                        <th class="text-center py-1 px-2">Désignation</th>
-                        <th class="text-center py-1 px-2">Prix Unitaire</th>
-                        <th class="text-center py-1 px-2">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                    $total = 0;
-                    $qry = $conn->query("SELECT p.*,i.name,i.description FROM `po_items` p inner join item_list i on p.item_id = i.id where p.po_id = '{$id}'");
-                    while($row = $qry->fetch_assoc()):
-                        $total += $row['total']
-                    ?>
-                    <tr>
-                    <td class="py-1 px-2 text-center">    </td>
-                        <td class="py-1 px-2 text-center"><?php echo number_format($row['quantity'],2) ?></td>
-                        <td class="py-1 px-2 text-center"><?php echo ($row['unit']) ?></td>
-                        <td class="py-1 px-2">
-                            <?php echo $row['name'] ?> <br>
-                            <?php echo $row['description'] ?>
-                        </td>
-                        <td class="py-1 px-2 text-right"><?php echo number_format($row['price']) ?></td>
-                        <td class="py-1 px-2 text-right"><?php echo number_format($row['total']) ?></td>
-                    </tr>
-
-                    <?php endwhile; ?>
-                    
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th class="text-right py-1 px-2" colspan="4">Sous-total</th>
-                        <th class="text-right py-1 px-2 sub-total"><?php echo number_format($total,2)  ?></th>
-                    </tr>
-                    <tr>
-                        <th class="text-right py-1 px-2" colspan="4">Remise <?php echo isset($discount_perc) ? $discount_perc : 0 ?>%</th>
-                        <th class="text-right py-1 px-2 discount"><?php echo isset($discount) ? number_format($discount,2) : 0 ?></th>
-                    </tr>
-                    <tr>
-                        <th class="text-right py-1 px-2" colspan="4">Taxe <?php echo isset($tax_perc) ? $tax_perc : 0 ?>%</th>
-                        <th class="text-right py-1 px-2 tax"><?php echo isset($tax) ? number_format($tax,2) : 0 ?></th>
-                    </tr>
-                    <tr>
-                        <th class="text-right py-1 px-2" colspan="4">Total</th>
-                        <th class="text-right py-1 px-2 grand-total"><?php echo isset($amount) ? number_format($amount,2) : 0 ?></th>
-                    </tr>
-                </tfoot>
-            </table>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="remarks" class="text-info control-label">Remarques</label>
-                        <p><?php echo isset($remarks) ? $remarks : '' ?></p>
-                    </div>
-                </div>
-                <?php if($status > 0): ?>
-                <div class="col-md-6">
-                    <span class="text-info"><?php echo ($status == 2)? "REÇU" : "PARTIELLEMENT REÇU" ?></span>
-                </div>
-                <?php endif; ?>
-            </div>
-        </div>
-
-
-
-
+    
 
     </div>
 

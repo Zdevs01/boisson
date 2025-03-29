@@ -64,7 +64,7 @@ if(isset($_GET['bo_id'])){
 </style>
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h4 class="card-title"><?php echo !isset($id) ? "Receive Order from ".$po_code : 'Update Received Order' ?></h4>
+        <h4 class="card-title"><?php echo !isset($id) ? "Réception de la commande de ".$po_code : 'Mettre à jour la commande reçue' ?></h4>
     </div>
     <div class="card-body">
         <form action="" id="receive-form">
@@ -76,18 +76,18 @@ if(isset($_GET['bo_id'])){
                 <div class="row">
                     <?php if(!isset($bo_id)): ?>
                     <div class="col-md-6">
-                        <label class="control-label text-info">P.O. Code</label>
+                        <label class="control-label text-info">Code P.O.</label>
                         <input type="text" class="form-control form-control-sm rounded-0" value="<?php echo isset($po_code) ? $po_code : '' ?>" readonly>
                     </div>
                     <?php else: ?>
                         <div class="col-md-6">
-                        <label class="control-label text-info">B.O. Code</label>
+                        <label class="control-label text-info">Code B.O.</label>
                         <input type="text" class="form-control form-control-sm rounded-0" value="<?php echo isset($bo_code) ? $bo_code : '' ?>" readonly>
                     </div>
                     <?php endif; ?>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="supplier_id" class="control-label text-info">Supplier</label>
+                            <label for="supplier_id" class="control-label text-info">Fournisseur</label>
                             <select id="supplier_id" name="supplier_id" class="custom-select select2">
                             <option <?php echo !isset($supplier_id) ? 'selected' : '' ?> disabled></option>
                             <?php 
@@ -113,13 +113,14 @@ if(isset($_GET['bo_id'])){
                     <thead>
                         <tr class="text-light bg-navy">
                             <th class="text-center py-1 px-2"></th>
-                            <th class="text-center py-1 px-2">Qty</th>
-                            <th class="text-center py-1 px-2">Unit</th>
-                            <th class="text-center py-1 px-2">Item</th>
-                            <th class="text-center py-1 px-2">Cost</th>
+                            <th class="text-center py-1 px-2">Quantité</th>
+                            <th class="text-center py-1 px-2">Unité</th>
+                            <th class="text-center py-1 px-2">Article</th>
+                            <th class="text-center py-1 px-2">Coût</th>
                             <th class="text-center py-1 px-2">Total</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <?php 
                         $total = 0;
@@ -137,76 +138,77 @@ if(isset($_GET['bo_id'])){
                                 $row['qty'] = $qty->num_rows > 0 ? $qty->fetch_assoc()['quantity'] : $row['qty'];
                             }
                         ?>
-                        <tr>
-                            <td class="py-1 px-2 text-center">
-                                <button class="btn btn-outline-danger btn-sm rem_row" type="button"><i class="fa fa-times"></i></button>
-                            </td>
-                            <td class="py-1 px-2 text-center qty">
-                                <input type="number" name="qty[]" style="width:50px !important" value="<?php echo $row['qty']; ?>" max = "<?php echo $row['quantity']; ?>" min="0">
-                                <input type="hidden" name="item_id[]" value="<?php echo $row['item_id']; ?>">
-                                <input type="hidden" name="unit[]" value="<?php echo $row['unit']; ?>">
-                                <input type="hidden" name="oqty[]" value="<?php echo $row['quantity']; ?>">
-                                <input type="hidden" name="price[]" value="<?php echo $row['price']; ?>">
-                                <input type="hidden" name="total[]" value="<?php echo $row['total']; ?>">
-                            </td>
-                            <td class="py-1 px-2 text-center unit">
-                            <?php echo $row['unit']; ?>
-                            </td>
-                            <td class="py-1 px-2 item">
-                            <?php echo $row['name']; ?> <br>
-                            <?php echo $row['description']; ?>
-                            </td>
-                            <td class="py-1 px-2 text-right cost">
-                            <?php echo number_format($row['price']); ?>
-                            </td>
-                            <td class="py-1 px-2 text-right total">
-                            <?php echo number_format($row['total']); ?>
-                            </td>
-                        </tr>
-                        <?php endwhile; ?>
-                        <?php endif; ?>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th class="text-right py-1 px-2" colspan="5">Sub Total</th>
-                            <th class="text-right py-1 px-2 sub-total">0</th>
-                        </tr>
-                        <tr>
-                            <th class="text-right py-1 px-2" colspan="5">Discount <input style="width:40px !important" name="discount_perc" class='' type="number" min="0" max="100" value="<?php echo isset($discount_perc) ? $discount_perc : 0 ?>">%
-                                <input type="hidden" name="discount" value="<?php echo isset($discount) ? $discount : 0 ?>">
-                            </th>
-                            <th class="text-right py-1 px-2 discount"><?php echo isset($discount) ? number_format($discount) : 0 ?></th>
-                        </tr>
-                        <tr>
-                            <th class="text-right py-1 px-2" colspan="5">Tax <input style="width:40px !important" name="tax_perc" class='' type="number" min="0" max="100" value="<?php echo isset($tax_perc) ? $tax_perc : 0 ?>">%
-                                <input type="hidden" name="tax" value="<?php echo isset($discount) ? $discount : 0 ?>">
-                            </th>
-                            <th class="text-right py-1 px-2 tax"><?php echo isset($tax) ? number_format($tax) : 0 ?></th>
-                        </tr>
-                        <tr>
-                            <th class="text-right py-1 px-2" colspan="5">Total
-                                <input type="hidden" name="amount" value="<?php echo isset($discount) ? $discount : 0 ?>">
-                            </th>
-                            <th class="text-right py-1 px-2 grand-total">0</th>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="remarks" class="text-info control-label">Remarks</label>
-                            <textarea name="remarks" id="remarks" rows="3" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="card-footer py-1 text-center">
-        <button class="btn btn-flat btn-primary" type="submit" form="receive-form">Save</button>
-        <a class="btn btn-flat btn-dark" href="<?php echo base_url.'/admin?page=purchase_order' ?>">Cancel</a>
+                       <tr>
+    <td class="py-1 px-2 text-center">
+        <button class="btn btn-outline-danger btn-sm rem_row" type="button"><i class="fa fa-times"></i></button>
+    </td>
+    <td class="py-1 px-2 text-center qty">
+        <input type="number" name="qty[]" style="width:50px !important" value="<?php echo $row['qty']; ?>" max = "<?php echo $row['quantity']; ?>" min="0">
+        <input type="hidden" name="item_id[]" value="<?php echo $row['item_id']; ?>">
+        <input type="hidden" name="unit[]" value="<?php echo $row['unit']; ?>">
+        <input type="hidden" name="oqty[]" value="<?php echo $row['quantity']; ?>">
+        <input type="hidden" name="price[]" value="<?php echo $row['price']; ?>">
+        <input type="hidden" name="total[]" value="<?php echo $row['total']; ?>">
+    </td>
+    <td class="py-1 px-2 text-center unit">
+        <?php echo $row['unit']; ?>
+    </td>
+    <td class="py-1 px-2 item">
+        <?php echo $row['name']; ?> <br>
+        <?php echo $row['description']; ?>
+    </td>
+    <td class="py-1 px-2 text-right cost">
+        <?php echo number_format($row['price']); ?>
+    </td>
+    <td class="py-1 px-2 text-right total">
+        <?php echo number_format($row['total']); ?>
+    </td>
+</tr>
+<?php endwhile; ?>
+<?php endif; ?>
+</tbody>
+<tfoot>
+    <tr>
+        <th class="text-right py-1 px-2" colspan="5">Sous-total</th>
+        <th class="text-right py-1 px-2 sub-total">0</th>
+    </tr>
+    <tr>
+        <th class="text-right py-1 px-2" colspan="5">Remise <input style="width:40px !important" name="discount_perc" class='' type="number" min="0" max="100" value="<?php echo isset($discount_perc) ? $discount_perc : 0 ?>">%
+            <input type="hidden" name="discount" value="<?php echo isset($discount) ? $discount : 0 ?>">
+        </th>
+        <th class="text-right py-1 px-2 discount"><?php echo isset($discount) ? number_format($discount) : 0 ?></th>
+    </tr>
+    <tr>
+        <th class="text-right py-1 px-2" colspan="5">Taxe <input style="width:40px !important" name="tax_perc" class='' type="number" min="0" max="100" value="<?php echo isset($tax_perc) ? $tax_perc : 0 ?>">%
+            <input type="hidden" name="tax" value="<?php echo isset($discount) ? $discount : 0 ?>">
+        </th>
+        <th class="text-right py-1 px-2 tax"><?php echo isset($tax) ? number_format($tax) : 0 ?></th>
+    </tr>
+    <tr>
+        <th class="text-right py-1 px-2" colspan="5">Total
+            <input type="hidden" name="amount" value="<?php echo isset($discount) ? $discount : 0 ?>">
+        </th>
+        <th class="text-right py-1 px-2 grand-total">0</th>
+    </tr>
+</tfoot>
+</table>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="remarks" class="text-info control-label">Remarques</label>
+            <textarea name="remarks" id="remarks" rows="3" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
+        </div>
     </div>
 </div>
+</div>
+</form>
+</div>
+<div class="card-footer py-1 text-center">
+    <button class="btn btn-flat btn-primary" type="submit" form="receive-form">Enregistrer</button>
+    <a class="btn btn-flat btn-dark" href="<?php echo base_url.'/admin?page=purchase_order' ?>">Annuler</a>
+</div>
+</div>
+
 <script>
     $(function(){
         $('.select2').select2({

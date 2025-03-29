@@ -38,14 +38,21 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     </div>
 
                     <div class="form-group">
-                        <label for="category"><i class="fas fa-tags"></i> Type de Produit *</label>
-                        <select name="category" id="category" class="custom-select select2" required>
-                            <option value="" disabled selected>Choisissez un type</option>
-                            <option value="Bière" <?php echo isset($category) && $category == 'Bière' ? 'selected' : '' ?>>Bière</option>
-                            <option value="Jus" <?php echo isset($category) && $category == 'Jus' ? 'selected' : '' ?>>Jus</option>
-                            <option value="Soda" <?php echo isset($category) && $category == 'Soda' ? 'selected' : '' ?>>Soda</option>
-                        </select>
-                    </div>
+    <label for="category"><i class="fas fa-tags"></i> Catégorie *</label>
+    
+    <select name="category_id" id="category_id" class="custom-select select2" required>
+        <option value="" disabled selected>Veuillez sélectionner</option>
+        <?php 
+        $categories = $conn->query("SELECT * FROM category ORDER BY name ASC");
+        while ($row = $categories->fetch_assoc()):
+        ?>
+        <option value="<?php echo $row['id'] ?>" <?php echo isset($category_id) && $category_id == $row['id'] ? "selected" : "" ?>>
+            <?php echo $row['name'] ?>
+        </option>
+        <?php endwhile; ?>
+    </select>
+</div>
+
 
                     <div class="form-group">
                         <label for="description"><i class="fas fa-align-left"></i> Description *</label>

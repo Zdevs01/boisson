@@ -25,9 +25,10 @@ if ($qry->num_rows > 0) {
         background-color: #f8f9fa;
         padding: 15px;
         border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     .card-header {
-        background: linear-gradient(45deg, #007bff, #0056b3);
+        background: linear-gradient(45deg, #ff9e00, #ff5722); /* couleur inspirée des jus d'orange */
         color: white;
         text-align: center;
         padding: 15px;
@@ -39,11 +40,44 @@ if ($qry->num_rows > 0) {
     }
     .card-body dd {
         font-size: 16px;
+        color: #555;
+    }
+    .badge.bg-success {
+        background-color: #28a745; /* Vert frais pour 'En stock' */
+    }
+    .badge.bg-danger {
+        background-color: #dc3545; /* Rouge vif pour 'Rupture de stock' */
+    }
+    .btn-dark {
+        background-color: #343a40;
+        color: white;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+    .btn-dark:hover {
+        background-color: #555;
+        cursor: pointer;
+    }
+
+    /* Animation pour le texte */
+    .animate__fadeInUp {
+        animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
 
 <div class="container-fluid details-container" id="print_out">
-    <div class="card shadow-sm border-primary">
+    <div class="card shadow-sm border-primary animate__animated animate__fadeInUp">
         <div class="card-header">
             <i class="fas fa-wine-bottle fa-2x"></i>
             <h4 class="mt-2">Détails du Produit</h4>

@@ -1,9 +1,9 @@
 <div class="card card-outline card-primary border-0 shadow-lg rounded">
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
-        <h3 class="card-title font-weight-bold">Liste des Commandes d'Achat</h3>
+        <h3 class="card-title font-weight-bold text-dark"><i class="fas fa-cogs"></i> Liste des Commandes d'Achat</h3>
         <div class="card-tools mt-2 mt-md-0">
-            <a href="<?php echo base_url ?>admin/?page=purchase_order/manage_po" class="btn btn-primary btn-flat btn-sm">
-                <span class="fas fa-plus"></span> Créer Nouveau
+            <a href="<?php echo base_url ?>admin/?page=purchase_order/manage_po" class="btn btn-success btn-flat btn-sm">
+                <span class="fas fa-plus-circle"></span> Créer Nouveau
             </a>
         </div>
     </div>
@@ -20,7 +20,7 @@
                         <col width="10%">
                         <col width="10%">
                     </colgroup>
-                    <thead class="bg-primary text-white">
+                    <thead class="bg-dark text-white">
                         <tr>
                             <th>#</th>
                             <th>Date de Création</th>
@@ -38,7 +38,7 @@
                         while ($row = $qry->fetch_assoc()):
                             $row['items'] = $conn->query("SELECT COUNT(item_id) AS `items` FROM `po_items` WHERE po_id = '{$row['id']}'")->fetch_assoc()['items'];
                         ?>
-                            <tr>
+                            <tr class="table-row">
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td><?php echo date("d/m/Y H:i", strtotime($row['date_created'])) ?></td>
                                 <td><?php echo $row['po_code'] ?></td>
@@ -46,18 +46,18 @@
                                 <td class="text-right"><?php echo number_format($row['items']) ?></td>
                                 <td class="text-center">
                                     <?php if ($row['status'] == 0): ?>
-                                        <span class="badge badge-primary rounded-pill">En Attente</span>
+                                        <span class="badge badge-primary rounded-pill">En Attente <span class="emoji">⏳</span></span>
                                     <?php elseif ($row['status'] == 1): ?>
-                                        <span class="badge badge-warning rounded-pill">Partiellement Reçu</span>
+                                        <span class="badge badge-warning rounded-pill">Partiellement Reçu <span class="emoji">📦</span></span>
                                     <?php elseif ($row['status'] == 2): ?>
-                                        <span class="badge badge-success rounded-pill">Reçu</span>
+                                        <span class="badge badge-success rounded-pill">Reçu <span class="emoji">✅</span></span>
                                     <?php else: ?>
-                                        <span class="badge badge-danger rounded-pill">N/A</span>
+                                        <span class="badge badge-danger rounded-pill">N/A <span class="emoji">❌</span></span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">
                                     <div class="dropdown">
-                                        <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                             <span class="fas fa-cogs"></span> Actions
                                         </button>
                                         <div class="dropdown-menu">
@@ -68,15 +68,15 @@
                                                 <div class="dropdown-divider"></div>
                                             <?php endif; ?>
                                             <a class="dropdown-item" href="<?php echo base_url.'admin?page=purchase_order/view_po&id='.$row['id'] ?>">
-                                                <span class="fa fa-eye text-dark"></span> Voir
+                                                <span class="fa fa-eye text-dark"></span> Voir <span class="emoji">👁️</span>
                                             </a>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="<?php echo base_url.'admin?page=purchase_order/manage_po&id='.$row['id'] ?>">
-                                                <span class="fa fa-edit text-primary"></span> Modifier
+                                                <span class="fa fa-edit text-primary"></span> Modifier <span class="emoji">✏️</span>
                                             </a>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>">
-                                                <span class="fa fa-trash text-danger"></span> Supprimer
+                                                <span class="fa fa-trash text-danger"></span> Supprimer <span class="emoji">🗑️</span>
                                             </a>
                                         </div>
                                     </div>
@@ -99,7 +99,17 @@
             "paging": true,
             "searching": true,
             "ordering": true,
-            "responsive": true
+            "responsive": true,
+            "columnDefs": [
+                { 
+                    "targets": [0, 1, 2, 3], 
+                    "className": "text-center" 
+                },
+                { 
+                    "targets": [4, 5, 6], 
+                    "className": "text-right"
+                }
+            ]
         });
     });
 

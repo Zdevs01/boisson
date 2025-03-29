@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -104,17 +105,77 @@ foreach ($stockResults as $row) {
         }
     </style>
  <div class="container">
-    <h2 class="mt-4 text-center" style="color: #1e1e2f; " >📊 Tableau de Bord DrinkFlow</h2>
-
+    <h2 class="mt-4 text-center" style="color: #3c3f44; font-family: 'Roboto', sans-serif; font-weight: 600; ">📊 Tableau de Bord DrinkFlow</h2>
     <div class="row mt-4">
-        <div class="col-md-6">
+        <div class="col-md-6 mb-4">
             <canvas id="salesChart"></canvas>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 mb-4">
             <canvas id="stockChart"></canvas>
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        background-color: #2b2f3a;
+        color: #fff;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    .card {
+        background: #333;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-title {
+        color: #bbb;
+        font-weight: 500;
+    }
+
+    canvas {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    }
+</style>
+<?php
+// Récupérer les ventes par mois
+$salesQuery = "SELECT DATE_FORMAT(sale_date, '%b') as month, SUM(total_price) as total 
+               FROM sales GROUP BY month ORDER BY MIN(sale_date)";
+$salesStmt = $conn->prepare($salesQuery);
+$salesStmt->execute();
+$salesResults = $salesStmt->fetchAll(PDO::FETCH_ASSOC);
+
+$salesMonths = [];
+$salesData = [];
+foreach ($salesResults as $row) {
+    $salesMonths[] = $row['month'];
+    $salesData[] = $row['total'];
+}
+
+// Récupérer le stock disponible par produit
+$stockQuery = "SELECT i.name, SUM(s.quantity) as total_stock 
+               FROM stock_list s 
+               INNER JOIN item_list i ON s.item_id = i.id
+               GROUP BY s.item_id";
+$stockStmt = $conn->prepare($stockQuery);
+$stockStmt->execute();
+$stockResults = $stockStmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stockLabels = [];
+$stockData = [];
+foreach ($stockResults as $row) {
+    $stockLabels[] = $row['name']; // Afficher le nom des produits
+    $stockData[] = $row['total_stock'];
+}
+?>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -195,4 +256,20 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
+
+<script src="assets/js/jquery-3.6.0.min.js"></script>
+
+<script src="assets/js/feather.min.js"></script>
+
+<script src="assets/js/jquery.slimscroll.min.js"></script>
+
+<script src="assets/js/jquery.dataTables.min.js"></script>
+<script src="assets/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+
+<script src="assets/plugins/apexchart/apexcharts.min.js"></script>
+<script src="assets/plugins/apexchart/chart-data.js"></script>
+
+<script src="assets/js/script.js"></script>
 </body>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 10 fév. 2025 à 13:19
+-- Généré le : sam. 29 mars 2025 à 11:15
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -97,6 +97,27 @@ CREATE TABLE `bo_items` (
   `unit` varchar(50) NOT NULL,
   `total` float NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `category`
+--
+
+CREATE TABLE `category` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `date_created` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `category`
+--
+
+INSERT INTO `category` (`id`, `name`, `description`, `date_created`) VALUES
+(1, 'Plastique', 'Produits et emballages en plastique', '2025-03-26 18:20:48'),
+(2, 'Bouteille', 'Bouteilles en verre ou en plastique', '2025-03-26 18:20:48');
 
 -- --------------------------------------------------------
 
@@ -240,7 +261,9 @@ CREATE TABLE `item_list` (
 --
 
 INSERT INTO `item_list` (`id`, `name`, `category`, `typ`, `description`, `supplier_id`, `cost`, `stock`, `cost1`, `qte`, `nbrs`, `poid`, `benef`, `status`, `date_created`, `date_updated`) VALUES
-(92, 'coca ', 'Jus', 'littre', 'ras', 11, 150, '100', 100, 100, 0, 0, 0, 1, '2025-02-10 13:12:35', '2025-02-10 13:30:23');
+(92, 'coca ', 'Jus', 'littre', 'ras', 11, 150, '100', 100, 100, 0, 0, 0, 1, '2025-02-10 13:12:35', '2025-02-10 13:30:23'),
+(95, 'banane', 'Jus', '', '4', 11, 22, '', 0, 1000, 0, 0, 0, 1, '2025-02-10 13:09:27', '2025-03-29 11:15:20'),
+(96, 'pomme', 'Jus', '', '1', 11, 1, '', 0, 11, 0, 0, 0, 1, '2025-02-10 13:36:30', '2025-03-29 11:15:27');
 
 -- --------------------------------------------------------
 
@@ -271,6 +294,8 @@ INSERT INTO `personnel` (`id`, `nom_complet`, `statut`, `date_creation`) VALUES
 CREATE TABLE `po_items` (
   `po_id` int(30) NOT NULL,
   `item_id` int(30) NOT NULL,
+  `containing` varchar(900) NOT NULL,
+  `date` varchar(900) NOT NULL,
   `quantity` int(30) NOT NULL,
   `price` float NOT NULL DEFAULT 0,
   `unit` varchar(50) NOT NULL,
@@ -361,6 +386,7 @@ CREATE TABLE `purchase_order_list` (
   `id` int(30) NOT NULL,
   `po_code` varchar(50) NOT NULL,
   `client` varchar(900) NOT NULL,
+  `date` varchar(900) NOT NULL,
   `num` int(200) NOT NULL,
   `supplier_id` int(30) NOT NULL,
   `produit` varchar(900) NOT NULL,
@@ -440,14 +466,23 @@ CREATE TABLE `sales_list` (
   `sales_code` varchar(50) NOT NULL,
   `client` text DEFAULT NULL,
   `num` varchar(500) NOT NULL,
+  `email` varchar(900) NOT NULL,
+  `containing` varchar(900) NOT NULL,
   `ventetype` varchar(900) NOT NULL,
   `amount` float NOT NULL DEFAULT 0,
+  `mode_vente` varchar(900) NOT NULL,
   `prix` float NOT NULL DEFAULT 0,
   `remarks` text DEFAULT NULL,
+  `apply_tva` varchar(900) NOT NULL,
+  `total_amount1` varchar(900) NOT NULL,
+  `tva_rate` varchar(900) NOT NULL,
+  `calculated_tva` varchar(900) NOT NULL,
+  `final_amount` varchar(900) NOT NULL,
   `stock_ids` text NOT NULL,
   `date_created` datetime NOT NULL DEFAULT current_timestamp(),
   `date_updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `total_amount` float NOT NULL DEFAULT 0
+  `total_amount` float NOT NULL DEFAULT 0,
+  `status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -483,8 +518,11 @@ CREATE TABLE `supplier_list` (
   `name` text NOT NULL,
   `category` varchar(200) NOT NULL,
   `address` text NOT NULL,
+  `country` varchar(100) NOT NULL,
   `cperson` text NOT NULL,
   `contact` text NOT NULL,
+  `phone_number` varchar(20) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `date_created` datetime NOT NULL DEFAULT current_timestamp(),
   `date_updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -494,8 +532,9 @@ CREATE TABLE `supplier_list` (
 -- Déchargement des données de la table `supplier_list`
 --
 
-INSERT INTO `supplier_list` (`id`, `name`, `category`, `address`, `cperson`, `contact`, `status`, `date_created`, `date_updated`) VALUES
-(11, 'RAS', '', 'RAS', 'RAS', '693481655', 1, '2025-02-10 13:04:39', '2025-02-10 13:04:39');
+INSERT INTO `supplier_list` (`id`, `name`, `category`, `address`, `country`, `cperson`, `contact`, `phone_number`, `email`, `status`, `date_created`, `date_updated`) VALUES
+(11, 'RAS', '', 'RAS', '', 'RAS', '693481655', '', '', 1, '2025-02-10 13:04:39', '2025-02-10 13:04:39'),
+(12, 'durane', 'Digital', 'yde\r\nmimbo', 'Cameroun', 'eric', '65555555', '693481655', 'kamga@gmail.com', 1, '2025-03-26 18:14:01', '2025-03-26 18:14:01');
 
 -- --------------------------------------------------------
 
@@ -558,7 +597,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `firstname`, `middlename`, `lastname`, `username`, `password`, `avatar`, `last_login`, `type`, `date_added`, `date_updated`) VALUES
 (1, 'Adminstrator', NULL, 'Admin', 'admin', '0192023a7bbd73250516f069df18b500', 'uploads/avatar-1.png?v=1635556826', NULL, 1, '2021-01-20 14:02:37', '2021-10-30 09:20:26'),
-(21, 'tester-beter', NULL, 'tester-beter', 'tester-beter', 'a045b60be781286b25d9cd7a24fe5c4c', 'uploads/avatar-21.png?v=1739188681', NULL, 1, '2025-02-10 12:57:59', '2025-02-10 12:58:01');
+(21, 'tester-beter', NULL, 'tester-beter', 'tester-beter', 'a045b60be781286b25d9cd7a24fe5c4c', 'uploads/avatar-21.png?v=1739188681', NULL, 1, '2025-02-10 12:57:59', '2025-02-10 12:58:01'),
+(22, 'durane', NULL, 'durane', 'durane', 'ec7fd8c1d08e994cded76897fcafce10', NULL, NULL, 3, '2025-03-29 10:50:27', NULL);
 
 -- --------------------------------------------------------
 
@@ -663,6 +703,13 @@ ALTER TABLE `bordereau_livraison`
 ALTER TABLE `bo_items`
   ADD KEY `item_id` (`item_id`),
   ADD KEY `bo_id` (`bo_id`);
+
+--
+-- Index pour la table `category`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Index pour la table `chauffeur`
@@ -852,13 +899,19 @@ ALTER TABLE `approvisionnement`
 -- AUTO_INCREMENT pour la table `back_order_list`
 --
 ALTER TABLE `back_order_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `bordereau_livraison`
 --
 ALTER TABLE `bordereau_livraison`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `category`
+--
+ALTER TABLE `category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `chauffeur`
@@ -906,7 +959,7 @@ ALTER TABLE `gestion_presence`
 -- AUTO_INCREMENT pour la table `item_list`
 --
 ALTER TABLE `item_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT pour la table `personnel`
@@ -936,13 +989,13 @@ ALTER TABLE `produits`
 -- AUTO_INCREMENT pour la table `purchase_order_list`
 --
 ALTER TABLE `purchase_order_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT pour la table `receiving_list`
 --
 ALTER TABLE `receiving_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT pour la table `return_list`
@@ -960,19 +1013,19 @@ ALTER TABLE `sales`
 -- AUTO_INCREMENT pour la table `sales_list`
 --
 ALTER TABLE `sales_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=489;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=501;
 
 --
 -- AUTO_INCREMENT pour la table `stock_list`
 --
 ALTER TABLE `stock_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1161;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1177;
 
 --
 -- AUTO_INCREMENT pour la table `supplier_list`
 --
 ALTER TABLE `supplier_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT pour la table `system_info`
@@ -990,7 +1043,7 @@ ALTER TABLE `typ`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT pour la table `versement_bancaire`

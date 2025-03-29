@@ -9,119 +9,97 @@
   <div class="sidebar">
     <nav class="mt-4">
       <ul class="nav nav-pills nav-sidebar flex-column text-sm" data-widget="treeview" role="menu">
-        <li class="nav-item">
-          <a href="./" class="nav-link nav-home">
-            <i class="nav-icon fas fa-warehouse"></i>
-            <p>Tableau de bord</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=purchase_order" class="nav-link nav-purchase_order">
-            <i class="nav-icon fas fa-shopping-cart"></i>
-            <p>Commandes fournisseurs</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=receiving" class="nav-link nav-receiving">
-            <i class="nav-icon fas fa-truck-loading"></i>
-            <p>Réception des stocks</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=back_order" class="nav-link nav-back_order">
-            <i class="nav-icon fas fa-clock"></i>
-            <p>Commandes en attente</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=return" class="nav-link nav-return">
-            <i class="nav-icon fas fa-undo-alt"></i>
-            <p>Retours produits</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=choffeur" class="nav-link nav-chauffeur">
-            <i class="nav-icon fas fa-id-badge"></i>
-            <p>Chauffeurs</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=creancier" class="nav-link nav-creancier">
-            <i class="nav-icon fas fa-Creancier"></i>
-            <p>Creancier</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=fournisseur" class="nav-link nav-fournisseur">
-            <i class="nav-icon fas fa-handshake"></i>
-            <p>Versement fournisseurs</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=jour" class="nav-link nav-versement_journalier">
-            <i class="nav-icon fas fa-coins"></i>
-            <p>Versement journalier</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=bordereau" class="nav-link nav-bordereau">
-            <i class="nav-icon fas fa-file-alt"></i>
-            <p>Bordereaux de livraison</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=personnel" class="nav-link nav-personnel">
-            <i class="nav-icon fas fa-users"></i>
-            <p>Gestion du personnel</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=stocks" class="nav-link nav-stocks">
-            <i class="nav-icon fas fa-box"></i>
-            <p>Gestion des stocks</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=maintenance/supplier" class="nav-link nav-maintenance_supplier">
-            <i class="nav-icon fas fa-truck-loading"></i>
-            <p>Fournisseur</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=sales" class="nav-link nav-sales">
-            <i class="nav-icon fas fa-receipt"></i>
-            <p>Ventes</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=clients" class="nav-link nav-clients">
-            <i class="nav-icon fas fa-user"></i>
-            <p>Clients</p>
-          </a>
-        </li>
+        
+        <!-- Si l'utilisateur est un livreur (type = 3) -->
+        <?php if ($_settings->userdata('type') == 3): ?>
+          <li class="nav-item">
+            <a href="./" class="nav-link nav-home">
+              <i class="nav-icon fas fa-warehouse"></i>
+              <p>Tableau de bord</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url ?>admin/?page=Livreurs" class="nav-link nav-back_order">
+              <i class="nav-icon fas fa-clock"></i>
+              <p>Vente par livraison</p>
+            </a>
+          </li>
+        <?php endif; ?>
 
-        <?php if($_settings->userdata('type') == 1): ?>
-        <li class="nav-header">Administration</li>
+        <!-- Si l'utilisateur est un autre type (par exemple, administrateur ou personnel) -->
+        <?php if ($_settings->userdata('type') != 3): ?>
+          <li class="nav-item">
+            <a href="./" class="nav-link nav-home">
+              <i class="nav-icon fas fa-warehouse"></i>
+              <p>Tableau de bord</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url ?>admin/?page=purchase_order" class="nav-link nav-purchase_order">
+              <i class="nav-icon fas fa-shopping-cart"></i>
+              <p>Commandes fournisseurs</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url ?>admin/?page=personnel" class="nav-link nav-personnel">
+              <i class="nav-icon fas fa-users"></i>
+              <p>Gestion du personnel</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url ?>admin/?page=stocks" class="nav-link nav-stocks">
+              <i class="nav-icon fas fa-box"></i>
+              <p>Gestion des stocks</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url ?>admin/?page=maintenance/supplier" class="nav-link nav-maintenance_supplier">
+              <i class="nav-icon fas fa-truck-loading"></i>
+              <p>Fournisseur</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url ?>admin/?page=sales" class="nav-link nav-sales">
+              <i class="nav-icon fas fa-receipt"></i>
+              <p>Ventes</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url ?>admin/?page=clients" class="nav-link nav-clients">
+              <i class="nav-icon fas fa-user"></i>
+              <p>Clients</p>
+            </a>
+          </li>
 
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=maintenance/item" class="nav-link nav-maintenance_item">
-            <i class="nav-icon fas fa-boxes"></i>
-            <p>Liste des Articles</p>
-          </a>
-        </li>
+          <?php if ($_settings->userdata('type') == 1): ?>
+            <li class="nav-header">Administration</li>
+            <li class="nav-item">
+            <a href="<?php echo base_url ?>admin/?page=Livreurs" class="nav-link nav-back_order">
+              <i class="nav-icon fas fa-clock"></i>
+              <p>Vente par livraison</p>
+            </a>
+          </li>
 
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user_list">
-            <i class="nav-icon fas fa-users"></i>
-            <p>Utilisateurs</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url ?>admin/?page=system_info" class="nav-link nav-system_info">
-            <i class="nav-icon fas fa-cogs"></i>
-            <p>Paramètres</p>
-          </a>
-        </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url ?>admin/?page=maintenance/item" class="nav-link nav-maintenance_item">
+                <i class="nav-icon fas fa-boxes"></i>
+                <p>Liste des Articles</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user_list">
+                <i class="nav-icon fas fa-users"></i>
+                <p>Utilisateurs</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url ?>admin/?page=system_info" class="nav-link nav-system_info">
+                <i class="nav-icon fas fa-cogs"></i>
+                <p>Paramètres</p>
+              </a>
+            </li>
+          <?php endif; ?>
         <?php endif; ?>
       </ul>
     </nav>
